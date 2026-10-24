@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yell QR — Pembuat QR Code</title>
+<style>
+:root{--bg:#0b1020;--panel:#121a2e;--panel2:#18233b;--text:#eef3ff;--muted:#9eacc8;--accent:#7c5cff;--accent2:#35d6c3;--line:#283654}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at 15% 0%,#1c2450 0,transparent 34%),var(--bg);color:var(--text);min-height:100vh}
+.wrap{width:min(1050px,calc(100% - 32px));margin:auto;padding:28px 0 36px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:21px;letter-spacing:-.5px}
+.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:white;font-size:23px;box-shadow:0 8px 28px #7c5cff44}
+.pill{font-size:12px;font-weight:700;color:#72f2d7;border:1px solid #2b7d75;background:#123c3a;padding:8px 12px;border-radius:99px}
+.hero{text-align:center;margin:34px auto 28px;max-width:720px}
+.eyebrow{color:var(--accent2);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:2px}
+h1{font-size:clamp(32px,5vw,52px);line-height:1.08;letter-spacing:-1.8px;margin:12px 0}
+.hero p{color:var(--muted);line-height:1.7;margin:0 auto;max-width:600px}
+.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:start}
+.card{background:linear-gradient(180deg,#151f36,#11192b);border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 18px 60px #0002}
+.card h2{font-size:18px;margin:0 0 6px}
+.sub{font-size:13px;color:var(--muted);margin:0 0 22px;line-height:1.5}
+label{display:block;font-size:13px;font-weight:700;margin:17px 0 8px;color:#dbe5ff}
+input[type=url],input[type=text],select{width:100%;padding:13px 14px;border:1px solid #344361;border-radius:12px;background:#0c1426;color:var(--text);font:inherit;outline:none}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px #7c5cff25}
+input::placeholder{color:#687896}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.colorline{display:flex;align-items:center;gap:10px;background:#0c1426;border:1px solid #344361;border-radius:12px;padding:8px 10px}
+input[type=color]{width:35px;height:32px;padding:0;border:0;background:none;cursor:pointer}
+.colorline span{font-size:13px;color:var(--muted)}
+.btn{border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:800;cursor:pointer;transition:transform .15s,filter .15s}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.primary{width:100%;margin-top:22px;background:linear-gradient(100deg,var(--accent),#5e8cff);color:white;box-shadow:0 10px 26px #684bff35}
+.secondary{background:#24314c;color:var(--text);border:1px solid #344361}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.actions .btn{flex:1;min-width:120px}
+.preview{display:flex;flex-direction:column;align-items:center;text-align:center}
+.qr-stage{width:min(100%,310px);aspect-ratio:1;background:#fff;border-radius:20px;display:grid;place-items:center;padding:18px;margin:12px 0 18px;overflow:hidden}
+#qr{display:grid;place-items:center;width:100%;height:100%}
+#qr canvas,#qr img{max-width:100%;max-height:100%;height:auto!important;width:auto!important;image-rendering:pixelated}
+.empty{color:#5c6a83;font-size:13px;max-width:200px;line-height:1.6}
+.status{min-height:20px;font-size:13px;color:var(--accent2);margin-top:10px;overflow-wrap:anywhere}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.feature{border:1px solid var(--line);border-radius:16px;padding:16px;background:#10182a}
+.feature strong{display:block;font-size:13px;margin:8px 0 5px}
+.feature span{display:block;font-size:12px;color:var(--muted);line-height:1.5}
+.ico{font-size:20px}
+footer{text-align:center;color:#7785a2;font-size:12px;margin-top:28px;line-height:1.7}
+.note{background:#102b2c;border:1px solid #235451;border-radius:12px;padding:12px 13px;color:#b6f7e9;font-size:12px;line-height:1.6;margin-top:16px}
+@media(max-width:760px){.wrap{width:min(100% - 22px,540px);padding-top:18px}.layout{grid-template-columns:1fr}.hero{margin-top:22px}.card{padding:19px}.features{grid-template-columns:1fr}.feature{display:flex;gap:12px;align-items:flex-start}.feature strong{margin-top:0}header{align-items:flex-start}.pill{font-size:10px}.row{gap:9px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><div class="logo">⌗</div><span>Yell QR</span></div>
+    <div class="pill">✓ GRATIS · TANPA KEDALUWARSA</div>
+  </header>
+  <section class="hero">
+    <div class="eyebrow">Simple · Static · Forever</div>
+    <h1>Ubah link jadi <span style="background:linear-gradient(90deg,#a99aff,#54e5d0);color:transparent;background-clip:text">QR Code.</span></h1>
+    <p>Buat QR Code statis untuk website, formulir, katalog, atau link apa pun. Dibuat langsung dari browser tanpa akun dan tanpa langganan.</p>
+  </section>
+  <main class="layout">
+    <section class="card">
+      <h2>Buat QR Code</h2>
+      <p class="sub">Masukkan link tujuan dan sesuaikan tampilannya.</p>
+      <form id="qrForm">
+        <label for="url">Link tujuan</label>
+        <input id="url" type="url" placeholder="https://contoh.com" required>
+        <div class="row">
+          <div>
+            <label for="size">Ukuran gambar</label>
+            <select id="size"><option value="200">200 × 200 px</option><option value="300" selected>300 × 300 px</option><option value="500">500 × 500 px</option><option value="800">800 × 800 px</option></select>
+          </div>
+          <div>
+            <label for="level">Koreksi QR</label>
+            <select id="level"><option value="L">Rendah</option><option value="M" selected>Sedang</option><option value="Q">Tinggi</option><option value="H">Sangat tinggi</option></select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Warna QR</label>
+            <div class="colorline"><input id="dark" type="color" value="#111827"><span>Warna kode</span></div>
+          </div>
+          <div>
+            <label>Warna latar</label>
+            <div class="colorline"><input id="light" type="color" value="#ffffff"><span>Warna latar</span></div>
+          </div>
+        </div>
+        <button class="btn primary" type="submit">✦ Buat QR Code</button>
+      </form>
+      <div class="note">QR Code ini bersifat <b>statis</b>: link disimpan langsung di pola QR, bukan melalui layanan pengalihan berjangka. Masa aktifnya tidak ditentukan oleh web ini.</div>
+    </section>
+    <section class="card preview">
+      <h2>Pratinjau QR Code</h2>
+      <p class="sub">Hasil QR Code akan muncul di bawah ini.</p>
+      <div class="qr-stage"><div id="qr"><div class="empty">QR Code kamu akan tampil di sini setelah dibuat.</div></div></div>
+      <div id="status" class="status" aria-live="polite"></div>
+      <div class="actions">
+        <button id="download" class="btn secondary" type="button" disabled>↓ Download PNG</button>
+        <button id="print" class="btn secondary" type="button" disabled>▣ Cetak</button>
+      </div>
+    </section>
+  </main>
+  <section class="features">
+    <div class="feature"><div class="ico">∞</div><div><strong>Tanpa masa aktif</strong><span>QR statis tidak memiliki tanggal kedaluwarsa bawaan.</span></div></div>
+    <div class="feature"><div class="ico">⇩</div><div><strong>Simpan & cetak</strong><span>Unduh hasil sebagai PNG untuk poster, nota, atau dokumen.</span></div></div>
+    <div class="feature"><div class="ico">⌁</div><div><strong>Privat & sederhana</strong><span>Link diproses di browser dan tidak dikirim ke server aplikasi ini.</span></div></div>
+  </section>
+  <footer>Yell QR · Pembuat QR Code statis<br>QR tetap dapat dipindai selama gambarnya terbaca dan link tujuan masih aktif.</footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const form=document.getElementById('qrForm'), qrBox=document.getElementById('qr'), statusBox=document.getElementById('status');
+const downloadBtn=document.getElementById('download'), printBtn=document.getElementById('print');
+let currentUrl='';
+function makeQR(){
+  if(typeof QRCode==='undefined'){statusBox.textContent='Library QR belum termuat. Periksa koneksi internet lalu muat ulang halaman.';return}
+  const raw=document.getElementById('url').value.trim();
+  if(!raw){statusBox.textContent='Masukkan link terlebih dahulu.';return}
+  let parsed;
+  try{parsed=new URL(raw)}catch(e){statusBox.textContent='Link belum valid. Contoh: https://contoh.com';return}
+  if(!['http:','https:'].includes(parsed.protocol)){statusBox.textContent='Gunakan link yang diawali http:// atau https://';return}
+  currentUrl=parsed.href;
+  const size=Number(document.getElementById('size').value);
+  const dark=document.getElementById('dark').value, light=document.getElementById('light').value;
+  const levels={L:QRCode.CorrectLevel.L,M:QRCode.CorrectLevel.M,Q:QRCode.CorrectLevel.Q,H:QRCode.CorrectLevel.H};
+  qrBox.innerHTML='';
+  new QRCode(qrBox,{text:currentUrl,width:size,height:size,colorDark:dark,colorLight:light,correctLevel:levels[document.getElementById('level').value]});
+  statusBox.textContent='QR Code berhasil dibuat untuk: '+currentUrl;
+  downloadBtn.disabled=false;printBtn.disabled=false;
+}
+form.addEventListener('submit',e=>{e.preventDefault();makeQR()});
+downloadBtn.addEventListener('click',()=>{
+  const canvas=qrBox.querySelector('canvas'),img=qrBox.querySelector('img');
+  let data='';
+  if(canvas)data=canvas.toDataURL('image/png');else if(img)data=img.src;
+  if(!data){statusBox.textContent='QR belum siap diunduh.';return}
+  const a=document.createElement('a');a.href=data;a.download='yell-qr-code.png';document.body.appendChild(a);a.click();a.remove();
+});
+printBtn.addEventListener('click',()=>{
+  const canvas=qrBox.querySelector('canvas'),img=qrBox.querySelector('img');
+  const src=canvas?canvas.toDataURL('image/png'):(img?img.src:'');
+  if(!src)return;
+  const w=window.open('','_blank');
+  if(!w){statusBox.textContent='Izinkan pop-up browser untuk mencetak QR Code.';return}
+  w.document.write('<!DOCTYPE html><html><head><title>Cetak QR Code</title><style>body{font-family:Arial;text-align:center;padding:30px}img{width:300px;height:300px;max-width:90vw}p{overflow-wrap:anywhere}</style></head><body><h2>QR Code</h2><img src="'+src+'" alt="QR Code"><p>'+currentUrl.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</p><script>window.onload=()=>{window.print()}<\/script></body></html>');
+  w.document.close();
+});
+</script>
+</body>
+</html>
